@@ -1,8 +1,9 @@
 FROM python:3.10
 
 
-
+COPY audios ./audios
 COPY requirements.txt ./requirements.txt
+COPY vocab.json ./vocab.json
 COPY templates ./templates
 RUN pip install -r requirements.txt
 
