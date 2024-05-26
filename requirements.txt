@@ -6,6 +6,4 @@ transformers
 datetime
 soundfile
 librosa
-csv
 werkzeug
-io
