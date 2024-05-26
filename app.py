@@ -42,12 +42,12 @@ def transcribe_audio():
             filepath = os.path.join(AUDIO_DIR, f"audio_{current_datetime}_{filename}")
 
             # Enregistrer le fichier audio dans le dossier spécifié
-            #file.save(filepath)
+            file.save(filepath)
             # Process the file in memory
-            file_content = file.read()
-            audio_bytes = io.BytesIO(file_content)
+            #file_content = file.read()
+            #audio_bytes = io.BytesIO(file_content)
 
-            input_audio, sr = librosa.load(audio_bytes, sr=16000)
+            input_audio, sr = librosa.load(filepath, sr=16000)
 
             # tokenize
             input_values = processor(input_audio, return_tensors="pt", padding=True).input_values
