@@ -205,7 +205,7 @@
             }
 
             var formData = new FormData();
-            formData.append("audio", blob, "sample.wav");
+            formData.append("file", blob, "sample.wav");
 
             // Envoi du fichier audio au serveur via une requête AJAX avec jQuery
             $.ajax({
