@@ -36,34 +36,38 @@ def transcribe_audio():
         return jsonify({"error": "No selected file"}), 400
 
     if file:
-        current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        filename = secure_filename(file.filename)
-        filepath = os.path.join(AUDIO_DIR, f"audio_{current_datetime}_{filename}")
+        try:
+            current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(AUDIO_DIR, f"audio_{current_datetime}_{filename}")
 
-        # Enregistrer le fichier audio dans le dossier spécifié
-        #file.save(filepath)
-         # Process the file in memory
-        file_content = file.read()
-        audio_bytes = io.BytesIO(file_content)
+            # Enregistrer le fichier audio dans le dossier spécifié
+            #file.save(filepath)
+            # Process the file in memory
+            file_content = file.read()
+            audio_bytes = io.BytesIO(file_content)
 
-        input_audio, sr = librosa.load(audio_bytes, sr=16000)
+            input_audio, sr = librosa.load(audio_bytes, sr=16000)
 
-        # tokenize
-        input_values = processor(input_audio, return_tensors="pt", padding=True).input_values
+            # tokenize
+            input_values = processor(input_audio, return_tensors="pt", padding=True).input_values
 
-        # retrieve logits
-        logits = model(input_values).logits
+            # retrieve logits
+            logits = model(input_values).logits
 
-        tokens = torch.argmax(logits, axis=-1)
+            tokens = torch.argmax(logits, axis=-1)
 
-        # decode using n-gram
-        transcription = tokenizer.batch_decode(tokens)
+            # decode using n-gram
+            transcription = tokenizer.batch_decode(tokens)
 
-        #with open("transcriptions.csv", "a", newline="",encoding="utf-8") as csvfile:
-        #    writer = csv.writer(csvfile)
-         #   writer.writerow([filepath, transcription[0]])
+            #with open("transcriptions.csv", "a", newline="",encoding="utf-8") as csvfile:
+            #    writer = csv.writer(csvfile)
+            #   writer.writerow([filepath, transcription[0]])
 
-        return jsonify({"transcription": transcription[0]})
+            return jsonify({"transcription": transcription[0]})
+        except Exception as e:
+             
+          return jsonify({"transcription": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port='3000',debug=True)
