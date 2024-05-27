@@ -9,6 +9,11 @@ import librosa
 import csv
 import io
 app = Flask(__name__)
+
+UPLOAD_FOLDER = 'audios'
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
 # Charger le modèle Wav2Vec2 pré-entraîné et le tokenizer
 """ try:
     tokenizer = Wav2Vec2CTCTokenizer("vocab.json", unk_token="[UNK]", pad_token="[PAD]", word_delimiter_token="|")
@@ -17,16 +22,7 @@ app = Flask(__name__)
 except Exception as e:
     app.logger.error(f"Error loading model: {e}")
     raise SystemExit(f"Error loading model: {e}") """
-try:
-    with open('/src/llms/example.txt', 'r') as file:
-        content = file.read()
-        print(content)
-        
-except FileNotFoundError:
-    print("Error: The file 'example.txt' was not found.")
-    app.logger.error(f"Error loading model: ")
-except IOError:
-    print("Error: An IOError occurred while handling the file.")
+
 
 
 AUDIO_DIR = "audios"
@@ -36,12 +32,24 @@ def index():
 
 @app.route('/api/data', methods=['POST'])
 def process_data():
+    try:
+        with open('/src/llms/example.txt', 'r') as file:
+            content = file.read()
+            res = content
+            
+    except FileNotFoundError:
+        res = "Error: The file 'example.txt' was not found."
+        
+    except IOError:
+        res = "Error: An IOError occurred while handling the file."
     data = request.get_json()
     response_data = {
         "message": "Data received successfully",
-        "received_data": data
+        "received_data": data,
+        "response":res
     }
     return jsonify(response_data)
+
 @app.route('/transcrib', methods=['POST'])
 def transcribe_audio():
     if 'file' not in request.files:
