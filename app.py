@@ -10,13 +10,23 @@ import csv
 import io
 app = Flask(__name__)
 # Charger le modèle Wav2Vec2 pré-entraîné et le tokenizer
-try:
+""" try:
     tokenizer = Wav2Vec2CTCTokenizer("vocab.json", unk_token="[UNK]", pad_token="[PAD]", word_delimiter_token="|")
-    processor = Wav2Vec2Processor.from_pretrained('/src/llms//wav2vec-xlsr-large-darija', tokenizer=tokenizer)
+    processor = Wav2Vec2Processor.from_pretrained('/src/llms/wav2vec-xlsr-large-darija', tokenizer=tokenizer)
     model=Wav2Vec2ForCTC.from_pretrained('/src/llms/wav2vec-xlsr-large-darija')
 except Exception as e:
     app.logger.error(f"Error loading model: {e}")
-    raise SystemExit(f"Error loading model: {e}")
+    raise SystemExit(f"Error loading model: {e}") """
+try:
+    with open('/src/llms/example.txt', 'r') as file:
+        content = file.read()
+        print(content)
+        
+except FileNotFoundError:
+    print("Error: The file 'example.txt' was not found.")
+    app.logger.error(f"Error loading model: ")
+except IOError:
+    print("Error: An IOError occurred while handling the file.")
 
 
 AUDIO_DIR = "audios"
