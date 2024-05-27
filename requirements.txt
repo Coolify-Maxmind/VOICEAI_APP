@@ -1,0 +1,10 @@
+Flask
+Werkzeug==2.0.3
+gunicorn
+transformers
+torch
+librosa
+datetime
+soundfile
+librosa
+werkzeug
