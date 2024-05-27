@@ -219,6 +219,7 @@
                 success: function(response) {
                     response = JSON.parse(response);
                     console.log(response);
+                    console(response.transcription);
                     trascribResult.innerText = response.transcription;
                     startRecordingButton.disabled = false;
                 },
