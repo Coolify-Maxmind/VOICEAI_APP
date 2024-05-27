@@ -52,6 +52,9 @@ def process_data():
 
 @app.route('/transcrib', methods=['POST'])
 def transcribe_audio():
+    tokenizer = Wav2Vec2CTCTokenizer("vocab.json", unk_token="[UNK]", pad_token="[PAD]", word_delimiter_token="|")
+    processor = Wav2Vec2Processor.from_pretrained('/src/llms/wav2vec-xlsr-large-darija', tokenizer=tokenizer)
+    model=Wav2Vec2ForCTC.from_pretrained('/src/llms/wav2vec-xlsr-large-darija')
     if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
 
