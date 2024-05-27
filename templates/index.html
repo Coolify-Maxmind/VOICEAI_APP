@@ -74,6 +74,8 @@
             <textarea id="transcriptionOutput" placeholder="La transcription apparaîtra ici..." readonly></textarea>
         </div>
     </div>
+    <button onclick="sendData()">Send Data</button>
+    <pre id="response"></pre>
     <script>
         
         var startRecordingButton = document.getElementById("startRecordingButton");
@@ -277,6 +279,23 @@
             };
             xhr.send(formData);
         });*/
+        async function sendData() {
+            const data = {
+                name: "John Doe",
+                age: 30
+            };
+
+            const response = await fetch('/api/data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            document.getElementById('response').innerText = JSON.stringify(result, null, 2);
+        }
 
     </script>
 </body>
